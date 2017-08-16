@@ -1,7 +1,6 @@
 package com.spotlike.yan.spotlike.Managers
 
 import android.app.Activity
-import android.app.Fragment
 import android.app.FragmentTransaction
 import android.content.Context
 import android.content.Intent
@@ -27,7 +26,7 @@ class RoutingManager private constructor() {
         MainApplication.Companion.graph.inject(this)
     }
 
-    fun replaceFragment(layoutId: Int, bundle: Bundle, fragment: Fragment, activity: Activity) {
+    fun replaceFragment(layoutId: Int, bundle: Bundle, fragment: android.app.Fragment, activity: Activity) {
         var transaction: FragmentTransaction = activity.fragmentManager.beginTransaction()
         fragment.arguments = bundle
         transaction.replace(layoutId, fragment)

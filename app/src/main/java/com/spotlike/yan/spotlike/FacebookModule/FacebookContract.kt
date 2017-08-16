@@ -10,7 +10,7 @@ import com.spotlike.yan.spotlike.BaseContract.*
 interface FacebookContract {
 
     interface FacebookViewContract : BaseViewContract {
-        fun parentActivity() : Activity?
+
     }
 
     interface FacebookPresenterContract : BasePresenterContract {

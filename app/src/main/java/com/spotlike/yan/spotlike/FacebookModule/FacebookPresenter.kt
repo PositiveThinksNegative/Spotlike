@@ -1,7 +1,7 @@
 package com.spotlike.yan.spotlike.FacebookModule
 
-import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -13,18 +13,18 @@ import com.spotlike.yan.spotlike.FacebookModule.FacebookContract.*
 import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.Managers.ToastManager
+import com.spotlike.yan.spotlike.R
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeView
 
 /**
  * Created by yan on 2017-08-15.
  */
 class FacebookPresenter : FacebookPresenterContract {
-    @Inject lateinit var context: Context
-    @Inject lateinit var toastManager: ToastManager
+     @Inject lateinit var toastManager: ToastManager
     @Inject lateinit var routingManager: RoutingManager
-    var facebookView: FacebookViewContract? = null
-    var loginButton: LoginButton? = null
-    var callbackManager: CallbackManager? = null
+    private var facebookView: FacebookViewContract? = null
+    private var loginButton: LoginButton? = null
+    private var callbackManager: CallbackManager? = null
 
     init {
         MainApplication.Companion.graph.inject(this)
@@ -45,7 +45,9 @@ class FacebookPresenter : FacebookPresenterContract {
 
             override fun onSuccess(result: LoginResult?) {
                 toastManager.displayShortToast(result?.accessToken.toString())
-                routingManager.startActivity(facebookView?.parentActivity(), YoutubeView().javaClass)
+                if (facebookView != null) {
+                    routingManager.replaceFragment(R.id.fragment_frame_layout, Bundle(), YoutubeView(), facebookView!!.getParentActivity())
+                }
             }
 
             override fun onError(error: FacebookException?) {
@@ -62,7 +64,9 @@ class FacebookPresenter : FacebookPresenterContract {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager?.onActivityResult(requestCode, resultCode, data)
     }
+    override fun onViewCreated() {
 
+    }
 
     override fun onResume() {
 

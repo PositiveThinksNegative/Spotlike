@@ -2,6 +2,7 @@ package com.spotlike.yan.spotlike
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import com.facebook.AccessToken
 import com.spotlike.yan.spotlike.FacebookModule.FacebookView
 import com.spotlike.yan.spotlike.Managers.RoutingManager
@@ -15,13 +16,27 @@ class MainActivity : AppCompatActivity() {
         MainApplication.Companion.graph.inject(this)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        if (isFacebookLoggedIn()) {
+            inflater.inflate(R.menu.youtube_menu, menu)
+        } else {
+            inflater.inflate(R.menu.main_menu, menu)
+        }
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (AccessToken.getCurrentAccessToken() == null) {
-            routingManager.replaceFragment(R.id.fragment_frame_layout, Bundle(), FacebookView(), this)
+        if (isFacebookLoggedIn()) {
+            routingManager.replaceFragment(R.id.fragment_frame_layout, Bundle(), YoutubeView(), this)
         } else {
-            routingManager.startActivity(this, YoutubeView().javaClass)
+            routingManager.replaceFragment(R.id.fragment_frame_layout, Bundle(), FacebookView(), this)
         }
+    }
+
+    private fun isFacebookLoggedIn() : Boolean {
+        return AccessToken.getCurrentAccessToken() != null
     }
 }

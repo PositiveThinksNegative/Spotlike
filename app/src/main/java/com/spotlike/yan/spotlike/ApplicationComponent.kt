@@ -4,6 +4,7 @@ import com.spotlike.yan.spotlike.FacebookModule.FacebookPresenter
 import com.spotlike.yan.spotlike.FacebookModule.FacebookView
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.Managers.ToastManager
+import com.spotlike.yan.spotlike.YoutubeModule.YoutubePresenter
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeView
 import dagger.Component
 import javax.inject.Singleton
@@ -21,5 +22,6 @@ interface ApplicationComponent {
     fun inject(facebookView: FacebookView)
     fun inject(facebookView: ToastManager)
     fun inject(routingManager: RoutingManager)
+    fun inject(youtubePresenter: YoutubePresenter)
     fun inject(youtubeView: YoutubeView)
 }
