@@ -10,7 +10,7 @@ import com.spotlike.yan.spotlike.R
 /**
  * Created by yan on 2017-08-16.
  */
-class YoutubeAdapter(private val values : ArrayList<String>): RecyclerView.Adapter<YoutubeAdapter.ViewHolder>() {
+class YoutubeAdapter(private val values : ArrayList<YoutubeItem>): RecyclerView.Adapter<YoutubeAdapter.ViewHolder>() {
 
     class ViewHolder : RecyclerView.ViewHolder {
         var textHeader : TextView
@@ -24,7 +24,7 @@ class YoutubeAdapter(private val values : ArrayList<String>): RecyclerView.Adapt
         }
     }
 
-    fun add(position: Int, item: String) {
+    fun add(position: Int, item: YoutubeItem) {
         this.values.add(position, item)
     }
 
@@ -36,9 +36,9 @@ class YoutubeAdapter(private val values : ArrayList<String>): RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var name = values.get(position)
-        holder.textHeader.text = name
-        holder.textFooter.text = "footer: $name"
+        var youtubeItem : YoutubeItem = values.get(position)
+        holder.textHeader.text = youtubeItem.snippet.title
+        holder.textFooter.text = youtubeItem.snippet.description
     }
 
     override fun getItemCount(): Int {

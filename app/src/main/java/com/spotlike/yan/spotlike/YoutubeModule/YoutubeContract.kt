@@ -13,6 +13,7 @@ interface YoutubeContract {
     }
 
     interface YoutubePresenterContract : BaseContract.BasePresenterContract {
+        fun searchYoutube(searchKeyword: String)
         fun onOptionsItemSelected(item: MenuItem?, activity: Activity) : Boolean
     }
 }

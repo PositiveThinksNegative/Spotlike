@@ -5,7 +5,6 @@ import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.Managers.RequestsManager
 import okhttp3.Call
 import okhttp3.HttpUrl
-import okhttp3.Response
 import javax.inject.Inject
 
 /**
@@ -14,16 +13,21 @@ import javax.inject.Inject
 class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestListener {
     @Inject lateinit var requestsManager: RequestsManager
     @Inject lateinit var gson: Gson
+    private var youtubeRequestListener: YoutubeRequestListener? = null
+
+    interface YoutubeRequestListener {
+        fun youtubeResponse(youtubeObject: YoutubeObject)
+    }
 
     companion object {
         val INSTANCE: YoutubeRequestManager by lazy {
             YoutubeRequestManager()
         }
-        val baseBuilder : HttpUrl.Builder? = HttpUrl.parse("https://www.googleapis.com/youtube/v3/search?part=snippet")?.newBuilder()
+        val baseUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet"
+        val keyValue = "AIzaSyAxUlD5YCxrbIG6RPAD2Jydg2LOUGdavRE"
         val searchParam = "q"
         val maxResultsParam = "maxResults"
         val keyParam = "key"
-        val keyValue = "AIzaSyAxUlD5YCxrbIG6RPAD2Jydg2LOUGdavRE"
     }
 
     init {
@@ -31,7 +35,7 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
     }
 
     fun constructYTSearchRequest(maxResults: Int, searchKeyword: String): String {
-        val youtubeBuilder = baseBuilder
+        val youtubeBuilder : HttpUrl.Builder? = HttpUrl.parse(baseUrl)?.newBuilder()
         youtubeBuilder?.addQueryParameter(maxResultsParam, maxResults.toString())
         youtubeBuilder?.addQueryParameter(searchParam, searchKeyword)
         return buildYTApiUrl(youtubeBuilder)
@@ -51,7 +55,16 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
 
     override fun getJsonResults(success: Boolean, response: String) {
         if(success) {
-            var test = gson.fromJson(response, YoutubePojo :: class.java)
+            val youtubeObject : YoutubeObject = gson.fromJson(response, YoutubeObject:: class.java)
+            youtubeRequestListener?.youtubeResponse(youtubeObject)
         }
+    }
+
+    fun setListener(youtubeRequestListener: YoutubeRequestListener){
+        this.youtubeRequestListener = youtubeRequestListener
+    }
+
+    fun removeCallbackObserver() {
+        this.youtubeRequestListener = null
     }
 }
