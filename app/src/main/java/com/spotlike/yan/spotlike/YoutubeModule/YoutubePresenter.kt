@@ -18,11 +18,12 @@ import javax.inject.Inject
  */
 class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
     @Inject lateinit var routingManager: RoutingManager
+    @Inject lateinit var youtubeRequestMngr: YoutubeRequestManager
     @Inject lateinit var context: Context
     private var youtubeView: YoutubeView? = null
     private var recyclerView: RecyclerView? = null
     private var layoutManager : LinearLayoutManager? = null
-    var list : ArrayList<String> = ArrayList()
+    private var list : ArrayList<String> = ArrayList()
 
 
     init {
@@ -51,6 +52,10 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
                 adapter.remove(viewHolder.adapterPosition)
             }
         }
+
+        val url = youtubeRequestMngr.constructYTSearchRequest(25, "Hearthstone")
+        youtubeRequestMngr.launchYTRequestFromUrl(url)
+
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }

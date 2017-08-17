@@ -3,11 +3,14 @@ package com.spotlike.yan.spotlike
 import android.app.Application
 import android.content.Context
 import com.spotlike.yan.spotlike.FacebookModule.FacebookPresenter
+import com.spotlike.yan.spotlike.Managers.RequestsManager
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.Managers.ToastManager
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubePresenter
+import com.spotlike.yan.spotlike.YoutubeModule.YoutubeRequestManager
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 /**
@@ -39,5 +42,20 @@ import javax.inject.Singleton
     @Provides @Singleton
     fun provideToastManager(): ToastManager {
         return ToastManager.instance
+    }
+
+    @Provides @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient()
+    }
+
+    @Provides @Singleton
+    fun provideRequestsManager(): RequestsManager {
+        return RequestsManager.INSTANCE
+    }
+
+    @Provides @Singleton
+    fun provideYoutubeRequestManager(): YoutubeRequestManager {
+        return YoutubeRequestManager.INSTANCE
     }
 }
