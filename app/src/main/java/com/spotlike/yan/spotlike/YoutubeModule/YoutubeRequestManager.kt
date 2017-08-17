@@ -1,5 +1,6 @@
 package com.spotlike.yan.spotlike.YoutubeModule
 
+import com.google.gson.Gson
 import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.Managers.RequestsManager
 import okhttp3.Call
@@ -12,6 +13,7 @@ import javax.inject.Inject
  */
 class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestListener {
     @Inject lateinit var requestsManager: RequestsManager
+    @Inject lateinit var gson: Gson
 
     companion object {
         val INSTANCE: YoutubeRequestManager by lazy {
@@ -47,9 +49,9 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
         call?.enqueue(callback)
     }
 
-    override fun getJsonResults(success: Boolean, response: Response?) {
+    override fun getJsonResults(success: Boolean, response: String) {
         if(success) {
-
+            var test = gson.fromJson(response, YoutubePojo :: class.java)
         }
     }
 }

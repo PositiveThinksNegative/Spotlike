@@ -2,6 +2,7 @@ package com.spotlike.yan.spotlike
 
 import android.app.Application
 import android.content.Context
+import com.google.gson.Gson
 import com.spotlike.yan.spotlike.FacebookModule.FacebookPresenter
 import com.spotlike.yan.spotlike.Managers.RequestsManager
 import com.spotlike.yan.spotlike.Managers.RoutingManager
@@ -57,5 +58,10 @@ import javax.inject.Singleton
     @Provides @Singleton
     fun provideYoutubeRequestManager(): YoutubeRequestManager {
         return YoutubeRequestManager.INSTANCE
+    }
+
+    @Provides @Singleton
+    fun provideGson(): Gson {
+        return Gson()
     }
 }

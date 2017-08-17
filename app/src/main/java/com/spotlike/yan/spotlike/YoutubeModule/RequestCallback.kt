@@ -12,15 +12,15 @@ class RequestCallback : Callback {
     private var requestListener: JsonRequestListener? = null
 
     interface JsonRequestListener {
-        fun getJsonResults(success: Boolean, response: Response?)
+        fun getJsonResults(success: Boolean, response: String)
     }
 
     override fun onFailure(call: Call?, e: IOException?) {
-        requestListener?.getJsonResults(false, null)
+        requestListener?.getJsonResults(false, "")
     }
 
     override fun onResponse(call: Call?, response: Response) {
-        requestListener?.getJsonResults(response.isSuccessful, response)
+        requestListener?.getJsonResults(response.isSuccessful, response.body()?.string().toString())
     }
 
     fun setCallbackObserver(requestListener: JsonRequestListener) {

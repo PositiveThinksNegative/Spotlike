@@ -22,8 +22,6 @@ class RequestsManager private constructor() {
 
     fun createCallbackFromUrl(url: String) : Call? {
         val request: Request = Request.Builder().url(url).build()
-        //var callback = RequestCallback()
-        //okHttpClient.newCall(request)
         return okHttpClient.newCall(request)
     }
 }
