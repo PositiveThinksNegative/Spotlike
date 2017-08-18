@@ -2,10 +2,12 @@ package com.spotlike.yan.spotlike
 
 import com.spotlike.yan.spotlike.FacebookModule.FacebookPresenter
 import com.spotlike.yan.spotlike.FacebookModule.FacebookView
+import com.spotlike.yan.spotlike.Managers.ImageManager
 import com.spotlike.yan.spotlike.Managers.RequestsManager
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeRequestManager
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.Managers.ToastManager
+import com.spotlike.yan.spotlike.YoutubeModule.YoutubeAdapter
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubePresenter
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeView
 import dagger.Component
@@ -28,4 +30,6 @@ interface ApplicationComponent {
     fun inject(routingManager: RoutingManager)
     fun inject(youtubePresenter: YoutubePresenter)
     fun inject(youtubeView: YoutubeView)
+    fun inject(imageManager: ImageManager)
+    fun inject(imageManager: YoutubeAdapter)
 }

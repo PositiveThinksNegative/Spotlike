@@ -2,10 +2,8 @@ package com.spotlike.yan.spotlike.YoutubeModule
 
 import android.app.Activity
 import android.content.Context
-import android.os.Looper
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.MenuItem
 import com.facebook.login.LoginManager
 import com.spotlike.yan.spotlike.MainActivity
@@ -13,6 +11,9 @@ import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.R
 import javax.inject.Inject
+import android.support.v7.widget.GridLayoutManager
+
+
 
 /**
  * Created by yan on 2017-08-16.
@@ -42,6 +43,13 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = layoutManager
         recyclerView?.setHasFixedSize(true)
+
+        var numberOfElements = 1
+        if (routingManager.getGridRotationLayout() == GridLayoutManager.HORIZONTAL) {
+            numberOfElements = 2
+        }
+        val gridLayoutManager = GridLayoutManager(context, numberOfElements, GridLayoutManager.VERTICAL, false)
+        recyclerView?.layoutManager = gridLayoutManager
     }
 
     override fun searchYoutube(searchKeyword: String) {

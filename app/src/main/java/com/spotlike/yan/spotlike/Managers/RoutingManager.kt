@@ -6,9 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
+import android.view.Surface
 import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.R
 import javax.inject.Inject
+import android.view.Surface.ROTATION_180
+import android.view.Surface.ROTATION_90
+import android.view.Surface.ROTATION_0
+import android.view.WindowManager
+
+
 
 /**
  * Created by yan on 2017-08-15.
@@ -17,7 +25,7 @@ class RoutingManager private constructor() {
     @Inject lateinit var context: Context
 
     companion object {
-        val instance: RoutingManager by lazy {
+        val INSTANCE: RoutingManager by lazy {
             RoutingManager()
         }
     }
@@ -44,5 +52,15 @@ class RoutingManager private constructor() {
         var intent: Intent = Intent(activity, targetActivity)
         activity?.startActivity(intent)
         activity?.overridePendingTransition(R.anim.fadein, R.anim.fadeout)
+    }
+
+    fun getGridRotationLayout(): Int {
+        val rotation = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.rotation
+        when (rotation) {
+            Surface.ROTATION_0 -> return GridLayoutManager.VERTICAL
+            Surface.ROTATION_90 -> return GridLayoutManager.HORIZONTAL
+            Surface.ROTATION_180 -> return GridLayoutManager.VERTICAL
+            else -> return GridLayoutManager.HORIZONTAL
+        }
     }
 }

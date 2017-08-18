@@ -28,7 +28,7 @@ data class YoutubeItemSnippet(
 )
 
 data class YoutubeItemThumbnail(
-        val aDefault: YoutubeItemThumbnailUrl,
+        val default: YoutubeItemThumbnailUrl,
         val medium: YoutubeItemThumbnailUrl,
         val high: YoutubeItemThumbnailUrl
 )

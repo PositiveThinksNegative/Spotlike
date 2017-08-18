@@ -13,7 +13,7 @@ class ToastManager private constructor() {
     @Inject lateinit var context: Context
 
     companion object {
-        val instance: ToastManager by lazy {
+        val INSTANCE: ToastManager by lazy {
             ToastManager()
         }
     }

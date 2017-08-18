@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.google.gson.Gson
 import com.spotlike.yan.spotlike.FacebookModule.FacebookPresenter
+import com.spotlike.yan.spotlike.Managers.ImageManager
 import com.spotlike.yan.spotlike.Managers.RequestsManager
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.Managers.ToastManager
@@ -25,11 +26,9 @@ import javax.inject.Singleton
         return application.applicationContext
     }
 
-    @Provides @Singleton
-    fun provideRoutingManager(): RoutingManager {
-        return RoutingManager.instance
-    }
-
+    /**
+     * Presenters
+     */
     @Provides @Singleton
     fun provideFacebookPresenter(): FacebookPresenter {
         return FacebookPresenter()
@@ -40,14 +39,30 @@ import javax.inject.Singleton
         return YoutubePresenter()
     }
 
-    @Provides @Singleton
-    fun provideToastManager(): ToastManager {
-        return ToastManager.instance
-    }
-
+    /**
+     * Utilities
+     */
     @Provides @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient()
+    }
+
+    @Provides @Singleton
+    fun provideGson(): Gson {
+        return Gson()
+    }
+
+    /**
+     * MANAGERS
+     */
+    @Provides @Singleton
+    fun provideToastManager(): ToastManager {
+        return ToastManager.INSTANCE
+    }
+
+    @Provides @Singleton
+    fun provideRoutingManager(): RoutingManager {
+        return RoutingManager.INSTANCE
     }
 
     @Provides @Singleton
@@ -61,7 +76,8 @@ import javax.inject.Singleton
     }
 
     @Provides @Singleton
-    fun provideGson(): Gson {
-        return Gson()
+    fun provideImageManager(): ImageManager {
+        return ImageManager.INSTANCE
     }
+
 }

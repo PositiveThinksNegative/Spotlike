@@ -2,4 +2,14 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="thumbnail_height">180dp</dimen>
+    <dimen name="thumbnail_width">320dp</dimen>
+    <dimen name="card_view_padding">10dp</dimen>
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_album_radius">0dp</dimen>
+    <dimen name="album_cover_height">160dp</dimen>
+    <dimen name="video_title_padding">10dp</dimen>
+    <dimen name="video_title_text">15sp</dimen>
+    <dimen name="video_duration_padding_bottom">5dp</dimen>
+    <dimen name="video_duration_text">12sp</dimen>
 </resources>
