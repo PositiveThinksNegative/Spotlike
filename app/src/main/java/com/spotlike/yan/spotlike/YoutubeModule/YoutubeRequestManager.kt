@@ -23,7 +23,8 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
         val INSTANCE: YoutubeRequestManager by lazy {
             YoutubeRequestManager()
         }
-        val baseUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet"
+        val baseVideoUrl = "https://www.youtube.com/watch?v="
+        val baseSearchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet"
         val keyValue = "AIzaSyAxUlD5YCxrbIG6RPAD2Jydg2LOUGdavRE"
         val searchParam = "q"
         val maxResultsParam = "maxResults"
@@ -35,7 +36,7 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
     }
 
     fun constructYTSearchRequest(maxResults: Int, searchKeyword: String): String {
-        val youtubeBuilder : HttpUrl.Builder? = HttpUrl.parse(baseUrl)?.newBuilder()
+        val youtubeBuilder : HttpUrl.Builder? = HttpUrl.parse(baseSearchUrl)?.newBuilder()
         youtubeBuilder?.addQueryParameter(maxResultsParam, maxResults.toString())
         youtubeBuilder?.addQueryParameter(searchParam, searchKeyword)
         return buildYTApiUrl(youtubeBuilder)

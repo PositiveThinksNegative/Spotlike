@@ -42,7 +42,6 @@ class YoutubeView : Fragment(), YoutubeContract.YoutubeViewContract {
         } else {
             return super.onOptionsItemSelected(item)
         }
-
     }
 
     override fun getParentActivity(): AppCompatActivity {

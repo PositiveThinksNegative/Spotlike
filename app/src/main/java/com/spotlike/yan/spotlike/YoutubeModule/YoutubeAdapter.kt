@@ -43,7 +43,6 @@ class YoutubeAdapter(private val values : ArrayList<YoutubeItem>): RecyclerView.
         values.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, getItemCount())
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

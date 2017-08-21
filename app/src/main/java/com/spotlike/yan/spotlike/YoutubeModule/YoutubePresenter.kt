@@ -2,6 +2,7 @@ package com.spotlike.yan.spotlike.YoutubeModule
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
@@ -26,11 +27,13 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
     private var recyclerView: RecyclerView? = null
     private var layoutManager : LinearLayoutManager? = null
     private var youtubeList : ArrayList<YoutubeItem> = ArrayList()
+    private var adapter: YoutubeAdapter? = null
 
     init {
         MainApplication.Companion.graph.inject(this)
         searchYoutube("test")
     }
+
 
     fun bind(youtubeView: YoutubeView, recyclerView: RecyclerView) {
         this.youtubeView = youtubeView
@@ -39,11 +42,9 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
     }
 
     override fun onViewCreated() {
-        val adapter = YoutubeAdapter(youtubeList)
+        adapter = YoutubeAdapter(youtubeList)
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = layoutManager
-        recyclerView?.setHasFixedSize(true)
-
         var numberOfElements = 1
         if (routingManager.getGridRotationLayout() == GridLayoutManager.HORIZONTAL) {
             numberOfElements = 2
