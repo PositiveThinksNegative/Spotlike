@@ -25,6 +25,7 @@ class RoutingManager private constructor() {
         val INSTANCE: RoutingManager by lazy {
             RoutingManager()
         }
+        val EXTRA_STRING = "extra_string"
     }
 
     init {
@@ -77,8 +78,11 @@ class RoutingManager private constructor() {
         return canReplace
     }
 
-    fun startActivity(activity: Activity?, targetActivity: Class<in Activity>) {
-        var intent: Intent = Intent(activity, targetActivity)
+
+    @JvmOverloads
+    fun startActivity(activity: Activity?, targetActivity: Class<in Activity>, extra: String = "") {
+        var intent = Intent(activity, targetActivity)
+        intent.putExtra(EXTRA_STRING, extra)
         activity?.startActivity(intent)
         activity?.overridePendingTransition(R.anim.fadein, R.anim.fadeout)
     }

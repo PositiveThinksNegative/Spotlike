@@ -8,6 +8,8 @@ import com.spotlike.yan.spotlike.YoutubeModule.YoutubeRequestManager
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.Managers.ToastManager
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeAdapter
+import com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail.YoutubeDetailActivity
+import com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail.YoutubeDetailPresenter
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubePresenter
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeView
 import dagger.Component
@@ -32,4 +34,6 @@ interface ApplicationComponent {
     fun inject(youtubeView: YoutubeView)
     fun inject(imageManager: ImageManager)
     fun inject(imageManager: YoutubeAdapter)
+    fun inject(youtubeDetailActivity: YoutubeDetailActivity)
+    fun inject(youtubeDetailPresenter: YoutubeDetailPresenter)
 }

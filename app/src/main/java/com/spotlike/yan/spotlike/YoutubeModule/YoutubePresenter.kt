@@ -2,7 +2,6 @@ package com.spotlike.yan.spotlike.YoutubeModule
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
@@ -13,13 +12,13 @@ import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.R
 import javax.inject.Inject
 import android.support.v7.widget.GridLayoutManager
-
+import com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail.YoutubeDetailActivity
 
 
 /**
  * Created by yan on 2017-08-16.
  */
-class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
+class YoutubePresenter : YoutubeContract.YoutubePresenterContract, OnRecyclerViewItemClickListener {
     @Inject lateinit var routingManager: RoutingManager
     @Inject lateinit var youtubeRequestMngr: YoutubeRequestManager
     @Inject lateinit var context: Context
@@ -43,6 +42,7 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
 
     override fun onViewCreated() {
         adapter = YoutubeAdapter(youtubeList)
+        adapter?.setOnItemClickListener(this)
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = layoutManager
         var numberOfElements = 1
@@ -68,16 +68,21 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
 
     }
 
+    override fun onRecyclerViewItemClicked(position: Int, youtubeItem: YoutubeItem) {
+        var id : String
+        if(youtubeItem.id.videoId != null) {
+            id = youtubeItem.id.videoId
+        } else {
+            id = youtubeItem.id.channelId
+        }
+
+        routingManager.startActivity(youtubeView?.activity, YoutubeDetailActivity().javaClass, id)
+    }
+
     override fun onResume() {
     }
 
     override fun onPause() {
-    }
-
-    override fun unbind() {
-        this.youtubeView = null
-        this.recyclerView = null
-        this.layoutManager = null
     }
 
     override fun onOptionsItemSelected(item: MenuItem?, activity: Activity) : Boolean {
@@ -90,5 +95,11 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract {
             }
             else -> return false
         }
+    }
+
+    override fun unbind() {
+        this.youtubeView = null
+        this.recyclerView = null
+        this.layoutManager = null
     }
 }

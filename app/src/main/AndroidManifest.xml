@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".YoutubeModule.YoutubeView"></activity>
+        <activity android:name=".YoutubeModule.YoutubeView" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -44,6 +44,10 @@
         <activity
             android:name=".YoutubeModule.ScrollingActivity"
             android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".YoutubeModule.YoutubeDetail.YoutubeDetailActivity"
+            android:label="@string/title_activity_youtube_detail"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

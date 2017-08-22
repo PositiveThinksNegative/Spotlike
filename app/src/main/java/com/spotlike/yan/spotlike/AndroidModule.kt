@@ -8,6 +8,8 @@ import com.spotlike.yan.spotlike.Managers.ImageManager
 import com.spotlike.yan.spotlike.Managers.RequestsManager
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.Managers.ToastManager
+import com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail.YoutubeDetailContract
+import com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail.YoutubeDetailPresenter
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubePresenter
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeRequestManager
 import dagger.Module
@@ -37,6 +39,11 @@ import javax.inject.Singleton
     @Provides @Singleton
     fun provideYoutubePresenter(): YoutubePresenter {
         return YoutubePresenter()
+    }
+
+    @Provides @Singleton
+    fun provideYoutubeDetailPresenter(): YoutubeDetailPresenter {
+        return YoutubeDetailPresenter()
     }
 
     /**

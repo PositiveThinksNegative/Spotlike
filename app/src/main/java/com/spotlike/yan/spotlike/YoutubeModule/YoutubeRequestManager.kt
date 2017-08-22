@@ -14,6 +14,7 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
     @Inject lateinit var requestsManager: RequestsManager
     @Inject lateinit var gson: Gson
     private var youtubeRequestListener: YoutubeRequestListener? = null
+    private var currentYoutubeData : YoutubeObject? = null
 
     interface YoutubeRequestListener {
         fun youtubeResponse(youtubeObject: YoutubeObject)
@@ -58,7 +59,12 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
         if(success) {
             val youtubeObject : YoutubeObject = gson.fromJson(response, YoutubeObject:: class.java)
             youtubeRequestListener?.youtubeResponse(youtubeObject)
+            currentYoutubeData = youtubeObject
         }
+    }
+
+    fun getYoutubeItem(id: String) : YoutubeItem? {
+        return currentYoutubeData?.items?.find { it.id.videoId == id }
     }
 
     fun setListener(youtubeRequestListener: YoutubeRequestListener){

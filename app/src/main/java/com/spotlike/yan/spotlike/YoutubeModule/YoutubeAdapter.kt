@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.Managers.ImageManager
 import com.spotlike.yan.spotlike.R
+import kotlinx.android.synthetic.main.recyclerview_item_row.view.*
 import javax.inject.Inject
 
 /**
@@ -16,6 +17,7 @@ import javax.inject.Inject
  */
 class YoutubeAdapter(private val values : ArrayList<YoutubeItem>): RecyclerView.Adapter<YoutubeAdapter.ViewHolder>() {
     @Inject lateinit var imageManager: ImageManager
+    private var listener: OnRecyclerViewItemClickListener? = null
 
     init {
         MainApplication.graph.inject(this)
@@ -28,11 +30,16 @@ class YoutubeAdapter(private val values : ArrayList<YoutubeItem>): RecyclerView.
         var layout : View
 
         constructor(itemView: View) : super(itemView) {
-            layout = itemView
-            imageView = layout.findViewById(R.id.thumbnail)
-            textHeader = layout.findViewById(R.id.title)
-            textFooter = layout.findViewById(R.id.channel)
+            layout = itemView.card_relative_view
+            imageView = layout.thumbnail
+            textHeader = layout.title
+            textFooter = layout.channel
         }
+    }
+
+
+    fun setOnItemClickListener(listener: OnRecyclerViewItemClickListener) {
+        this.listener = listener
     }
 
     fun add(position: Int, item: YoutubeItem) {
@@ -50,6 +57,11 @@ class YoutubeAdapter(private val values : ArrayList<YoutubeItem>): RecyclerView.
         imageManager.loadImage(youtubeItem.snippet.thumbnails.medium.url, holder.imageView)
         holder.textHeader.text = youtubeItem.snippet.title
         holder.textFooter.text = youtubeItem.snippet.channelTitle
+        holder.layout.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                listener?.onRecyclerViewItemClicked(holder.adapterPosition, youtubeItem)
+            }
+        })
     }
 
     override fun getItemCount(): Int {
