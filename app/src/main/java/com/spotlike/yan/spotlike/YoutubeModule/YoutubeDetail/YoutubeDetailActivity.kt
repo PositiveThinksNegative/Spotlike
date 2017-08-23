@@ -34,6 +34,10 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
         val videoId = intent.extras.getString(RoutingManager.EXTRA_STRING)
         youtubeDetailPresenter.bind(this, videoId, app_bar)
         youtubeDetailPresenter.onViewCreated()
+
+        action_button_play.setOnClickListener {
+            youtubeDetailPresenter.onActionPlaySelected(this)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -44,7 +48,12 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return super.onOptionsItemSelected(item)
+        var optionHandled = youtubeDetailPresenter.onOptionsItemSelected(item, this)
+        if(optionHandled) {
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

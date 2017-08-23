@@ -1,5 +1,7 @@
 package com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail
 
+import android.app.Activity
+import android.view.MenuItem
 import com.spotlike.yan.spotlike.BaseContract
 
 /**
@@ -20,6 +22,7 @@ interface YoutubeDetailContract {
     }
 
     interface YoutubeDetailPresentation: BaseContract.BasePresenterContract {
-
+        fun onActionPlaySelected(activity: Activity)
+        fun onOptionsItemSelected(item: MenuItem?, activity: Activity) : Boolean
     }
 }

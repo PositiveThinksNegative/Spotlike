@@ -1,7 +1,11 @@
 package com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail
 
+import android.app.Activity
 import android.support.design.widget.AppBarLayout
+import android.view.MenuItem
+import com.facebook.login.LoginManager
 import com.spotlike.yan.spotlike.MainApplication
+import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.R
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeRequestManager
 import javax.inject.Inject
@@ -11,6 +15,7 @@ import javax.inject.Inject
  */
 class YoutubeDetailPresenter: YoutubeDetailContract.YoutubeDetailPresentation {
     @Inject lateinit var youtubeRequestMngr: YoutubeRequestManager
+    @Inject lateinit var routingManager: RoutingManager
     private var youtubeDetailView: YoutubeDetailContract.YoutubeDetailView? = null
     private var videoId: String = ""
     private var appBar: AppBarLayout? = null
@@ -55,6 +60,20 @@ class YoutubeDetailPresenter: YoutubeDetailContract.YoutubeDetailPresentation {
             youtubeDetailView?.setToolbarTitle(it.snippet.title)
             youtubeDetailView?.setDescriptionTitle(it.snippet.title)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?, activity: Activity): Boolean {
+        when (item?.itemId) {
+            R.id.action_play -> {
+                onActionPlaySelected(activity)
+                return true
+            }
+            else -> return false
+        }
+    }
+
+    override fun onActionPlaySelected(activity: Activity) {
+        routingManager.startActivity(activity, YoutubeVideoPlayer().javaClass, videoId)
     }
 
     override fun onResume() {
