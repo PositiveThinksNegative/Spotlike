@@ -2,6 +2,7 @@ package com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail
 
 import android.app.Activity
 import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
 import android.view.MenuItem
 import com.facebook.login.LoginManager
 import com.spotlike.yan.spotlike.MainApplication
@@ -31,22 +32,16 @@ class YoutubeDetailPresenter: YoutubeDetailContract.YoutubeDetailPresentation {
     }
 
     override fun onViewCreated() {
-        appBar?.addOnOffsetChangedListener(object: AppBarLayout.OnOffsetChangedListener{
-            var isShow = false
-            var scrollRange = -1
+        appBar?.addOnOffsetChangedListener(object: AppBarLayout.OnOffsetChangedListener {
+
 
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 if (appBarLayout != null) {
-                    if (scrollRange == -1) {
-                        scrollRange = appBarLayout.totalScrollRange
-                    }
-                    if (scrollRange + verticalOffset == 0) {
-                        isShow = true
+                    if (Math.abs(verticalOffset) == appBarLayout.totalScrollRange) {
                         youtubeDetailView?.showOption(R.id.action_play)
                         youtubeDetailView?.showToolbarTitle()
                         youtubeDetailView?.hideTitleDescription()
-                    } else if (isShow) {
-                        isShow = false
+                    } else {
                         youtubeDetailView?.hideOption(R.id.action_play)
                         youtubeDetailView?.hideToolbarTitle()
                         youtubeDetailView?.showTitleDescription()

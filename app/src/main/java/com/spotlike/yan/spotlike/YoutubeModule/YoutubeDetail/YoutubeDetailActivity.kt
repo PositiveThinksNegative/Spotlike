@@ -2,6 +2,7 @@ package com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.transition.Explode
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -30,6 +31,12 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         hideToolbarTitle()
+        window.allowEnterTransitionOverlap = false
+
+        val fade = Explode()
+        fade.excludeTarget(android.R.id.statusBarBackground, true)
+        fade.excludeTarget(android.R.id.navigationBarBackground, true)
+        window.enterTransition = fade
 
         val videoId = intent.extras.getString(RoutingManager.EXTRA_STRING)
         youtubeDetailPresenter.bind(this, videoId, app_bar)
@@ -90,7 +97,7 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
     }
 
     override fun setToolbarImage(imageSource: String) {
-        imageManager.loadImage(imageSource, expanded_image)
+        imageManager.loadImage(imageSource, thumbnail)
     }
 
     override fun setDescriptionText(text: String) {

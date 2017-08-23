@@ -6,9 +6,14 @@ import android.app.FragmentTransaction
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.util.Pair
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.Surface
+import android.view.View
+import android.view.Window
 import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.R
 import javax.inject.Inject
@@ -80,11 +85,22 @@ class RoutingManager private constructor() {
 
 
     @JvmOverloads
-    fun startActivity(activity: Activity?, targetActivity: Class<in Activity>, extra: String = "") {
-        var intent = Intent(activity, targetActivity)
-        intent.putExtra(EXTRA_STRING, extra)
-        activity?.startActivity(intent)
-        activity?.overridePendingTransition(R.anim.fadein, R.anim.fadeout)
+    fun startActivity(activity: Activity?, targetActivity: Class<in Activity>, extra: String = "", view: View? = null) {
+        activity?.let {
+            val intent = Intent(activity, targetActivity)
+            intent.putExtra(EXTRA_STRING, extra)
+
+            if (view != null) {
+                var pair1 = Pair<View, String>(activity.findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME)
+                var pair2 = Pair<View, String>(activity.findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME)
+                var pair3 = Pair<View, String>(view, ViewCompat.getTransitionName(view))
+                val activityOptions : ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, pair1, pair2, pair3)
+                activity.startActivity(intent, activityOptions.toBundle())
+            } else {
+                activity.startActivity(intent)
+                activity.overridePendingTransition(R.anim.fadein, R.anim.fadeout)
+            }
+        }
     }
 
     fun getGridRotationLayout(): Int {

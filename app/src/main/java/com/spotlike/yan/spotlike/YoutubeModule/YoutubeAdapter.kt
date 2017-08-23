@@ -54,12 +54,12 @@ class YoutubeAdapter(private val values : ArrayList<YoutubeItem>): RecyclerView.
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var youtubeItem : YoutubeItem = values.get(position)
-        imageManager.loadImage(youtubeItem.snippet.thumbnails.medium.url, holder.imageView)
+        imageManager.loadImage(youtubeItem.snippet.thumbnails.high.url, holder.imageView)
         holder.textHeader.text = youtubeItem.snippet.title
         holder.textFooter.text = youtubeItem.snippet.channelTitle
         holder.layout.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                listener?.onRecyclerViewItemClicked(holder.adapterPosition, youtubeItem)
+                listener?.onRecyclerViewItemClicked(holder.adapterPosition, youtubeItem, view)
             }
         })
     }

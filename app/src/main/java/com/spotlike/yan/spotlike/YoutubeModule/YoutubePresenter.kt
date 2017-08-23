@@ -12,6 +12,7 @@ import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.R
 import javax.inject.Inject
 import android.support.v7.widget.GridLayoutManager
+import android.view.View
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail.YoutubeDetailActivity
 
 
@@ -68,7 +69,7 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract, OnRecyclerVie
 
     }
 
-    override fun onRecyclerViewItemClicked(position: Int, youtubeItem: YoutubeItem) {
+    override fun onRecyclerViewItemClicked(position: Int, youtubeItem: YoutubeItem, view: View?) {
         var id : String
         if(youtubeItem.id.videoId != null) {
             id = youtubeItem.id.videoId
@@ -76,7 +77,7 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract, OnRecyclerVie
             id = youtubeItem.id.channelId
         }
 
-        routingManager.startActivity(youtubeView?.activity, YoutubeDetailActivity().javaClass, id)
+        routingManager.startActivity(youtubeView?.activity, YoutubeDetailActivity().javaClass, id, view?.findViewById(R.id.thumbnail))
     }
 
     override fun onResume() {
