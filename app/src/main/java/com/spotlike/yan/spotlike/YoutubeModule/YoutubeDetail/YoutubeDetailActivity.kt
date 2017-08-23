@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.Managers.ImageManager
 import com.spotlike.yan.spotlike.Managers.RoutingManager
@@ -27,6 +28,8 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        hideToolbarTitle()
 
         val videoId = intent.extras.getString(RoutingManager.EXTRA_STRING)
         youtubeDetailPresenter.bind(this, videoId, app_bar)
@@ -61,6 +64,22 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
         menu?.findItem(id)?.setVisible(false)
     }
 
+    override fun showToolbarTitle() {
+        toolbar_layout.isTitleEnabled = true
+    }
+
+    override fun hideToolbarTitle() {
+        toolbar_layout.isTitleEnabled = false
+    }
+
+    override fun showTitleDescription() {
+        youtube_detail_title.visibility = TextView.VISIBLE
+    }
+
+    override fun hideTitleDescription() {
+        youtube_detail_title.visibility = TextView.GONE
+    }
+
     override fun setToolbarImage(imageSource: String) {
         imageManager.loadImage(imageSource, expanded_image)
     }
@@ -70,7 +89,10 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
     }
 
     override fun setToolbarTitle(title: String) {
-        toolbar_layout.title = title
+        toolbar_layout?.title = title
     }
 
+    override fun setDescriptionTitle(title: String) {
+        youtube_detail_title?.text = title
+    }
 }

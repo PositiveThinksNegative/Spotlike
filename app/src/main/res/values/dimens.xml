@@ -10,6 +10,7 @@
     <dimen name="album_cover_height">160dp</dimen>
     <dimen name="video_title_padding">10dp</dimen>
     <dimen name="video_title_text">15sp</dimen>
+    <dimen name="video_detail_title_text">30sp</dimen>
     <dimen name="video_duration_padding_bottom">5dp</dimen>
     <dimen name="video_duration_text">12sp</dimen>
 </resources>

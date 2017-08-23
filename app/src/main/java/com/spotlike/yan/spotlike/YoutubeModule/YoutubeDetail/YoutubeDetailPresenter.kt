@@ -2,7 +2,6 @@ package com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail
 
 import android.support.design.widget.AppBarLayout
 import com.spotlike.yan.spotlike.MainApplication
-import com.spotlike.yan.spotlike.Managers.ImageManager
 import com.spotlike.yan.spotlike.R
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeRequestManager
 import javax.inject.Inject
@@ -39,9 +38,13 @@ class YoutubeDetailPresenter: YoutubeDetailContract.YoutubeDetailPresentation {
                     if (scrollRange + verticalOffset == 0) {
                         isShow = true
                         youtubeDetailView?.showOption(R.id.action_play)
+                        youtubeDetailView?.showToolbarTitle()
+                        youtubeDetailView?.hideTitleDescription()
                     } else if (isShow) {
                         isShow = false
                         youtubeDetailView?.hideOption(R.id.action_play)
+                        youtubeDetailView?.hideToolbarTitle()
+                        youtubeDetailView?.showTitleDescription()
                     }
                 }
             }
@@ -50,6 +53,7 @@ class YoutubeDetailPresenter: YoutubeDetailContract.YoutubeDetailPresentation {
             youtubeDetailView?.setDescriptionText(it.snippet.description)
             youtubeDetailView?.setToolbarImage(it.snippet.thumbnails.high.url)
             youtubeDetailView?.setToolbarTitle(it.snippet.title)
+            youtubeDetailView?.setDescriptionTitle(it.snippet.title)
         }
     }
 
