@@ -14,10 +14,10 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
     @Inject lateinit var requestsManager: RequestsManager
     @Inject lateinit var gson: Gson
     private var youtubeRequestListener: YoutubeRequestListener? = null
-    private var currentYoutubeData : YoutubeObject? = null
+    private var currentYoutubeData : ArrayList<YoutubeItem>? = null
 
     interface YoutubeRequestListener {
-        fun youtubeResponse(youtubeObject: YoutubeObject)
+        fun youtubeResponse(youtubeItems: ArrayList<YoutubeItem>)
     }
 
     companion object {
@@ -58,13 +58,18 @@ class YoutubeRequestManager private constructor(): RequestCallback.JsonRequestLi
     override fun getJsonResults(success: Boolean, response: String) {
         if(success) {
             val youtubeObject : YoutubeObject = gson.fromJson(response, YoutubeObject:: class.java)
-            youtubeRequestListener?.youtubeResponse(youtubeObject)
-            currentYoutubeData = youtubeObject
+            val youtubeItems : ArrayList<YoutubeItem>
+            youtubeItems = youtubeObject.items.filter {
+                it.id.videoId != null
+            } as ArrayList<YoutubeItem>
+
+            youtubeRequestListener?.youtubeResponse(youtubeItems)
+            currentYoutubeData = youtubeItems
         }
     }
 
     fun getYoutubeItem(id: String) : YoutubeItem? {
-        return currentYoutubeData?.items?.find { it.id.videoId == id }
+        return currentYoutubeData?.find { it.id.videoId == id }
     }
 
     fun setListener(youtubeRequestListener: YoutubeRequestListener){

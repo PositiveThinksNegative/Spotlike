@@ -2,9 +2,7 @@ package com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail
 
 import android.app.Activity
 import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CollapsingToolbarLayout
 import android.view.MenuItem
-import com.facebook.login.LoginManager
 import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.R
@@ -19,28 +17,33 @@ class YoutubeDetailPresenter: YoutubeDetailContract.YoutubeDetailPresentation {
     @Inject lateinit var routingManager: RoutingManager
     private var youtubeDetailView: YoutubeDetailContract.YoutubeDetailView? = null
     private var videoId: String = ""
-    private var appBar: AppBarLayout? = null
 
     init {
         MainApplication.Companion.graph.inject(this)
     }
 
-    fun bind(youtubeDetailView: YoutubeDetailContract.YoutubeDetailView, videoId: String, appBarLayout: AppBarLayout) {
+    fun bind(youtubeDetailView: YoutubeDetailContract.YoutubeDetailView, videoId: String) {
         this.youtubeDetailView = youtubeDetailView
         this.videoId = videoId
-        this.appBar = appBarLayout
     }
 
     override fun onViewCreated() {
-        appBar?.addOnOffsetChangedListener(object: AppBarLayout.OnOffsetChangedListener {
+        youtubeRequestMngr.getYoutubeItem(videoId)?.let {
+            youtubeDetailView?.setDescriptionText(it.snippet.description)
+            youtubeDetailView?.setToolbarImage(it.snippet.thumbnails.medium.url)
+            youtubeDetailView?.setToolbarTitle(it.snippet.title)
+            youtubeDetailView?.setDescriptionTitle(it.snippet.title)
+        }
+    }
 
-
+    override fun addOffsetListener(appBarLayout: AppBarLayout) {
+        appBarLayout?.addOnOffsetChangedListener(object: AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 if (appBarLayout != null) {
                     if (Math.abs(verticalOffset) == appBarLayout.totalScrollRange) {
                         youtubeDetailView?.showOption(R.id.action_play)
                         youtubeDetailView?.showToolbarTitle()
-                        youtubeDetailView?.hideTitleDescription()
+                        youtubeDetailView?.removeTitleDescription()
                     } else {
                         youtubeDetailView?.hideOption(R.id.action_play)
                         youtubeDetailView?.hideToolbarTitle()
@@ -49,12 +52,6 @@ class YoutubeDetailPresenter: YoutubeDetailContract.YoutubeDetailPresentation {
                 }
             }
         })
-        youtubeRequestMngr.getYoutubeItem(videoId)?.let {
-            youtubeDetailView?.setDescriptionText(it.snippet.description)
-            youtubeDetailView?.setToolbarImage(it.snippet.thumbnails.high.url)
-            youtubeDetailView?.setToolbarTitle(it.snippet.title)
-            youtubeDetailView?.setDescriptionTitle(it.snippet.title)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?, activity: Activity): Boolean {

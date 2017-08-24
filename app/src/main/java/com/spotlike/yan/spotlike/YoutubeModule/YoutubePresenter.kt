@@ -2,7 +2,6 @@ package com.spotlike.yan.spotlike.YoutubeModule
 
 import android.app.Activity
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import com.facebook.login.LoginManager
@@ -25,7 +24,6 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract, OnRecyclerVie
     @Inject lateinit var context: Context
     private var youtubeView: YoutubeView? = null
     private var recyclerView: RecyclerView? = null
-    private var layoutManager : LinearLayoutManager? = null
     private var youtubeList : ArrayList<YoutubeItem> = ArrayList()
     private var adapter: YoutubeAdapter? = null
 
@@ -34,22 +32,21 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract, OnRecyclerVie
         searchYoutube("test")
     }
 
-
     fun bind(youtubeView: YoutubeView, recyclerView: RecyclerView) {
         this.youtubeView = youtubeView
         this.recyclerView = recyclerView
-        this.layoutManager = LinearLayoutManager(context)
     }
 
     override fun onViewCreated() {
         adapter = YoutubeAdapter(youtubeList)
         adapter?.setOnItemClickListener(this)
         recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = layoutManager
+
         var numberOfElements = 1
         if (routingManager.getGridRotationLayout() == GridLayoutManager.HORIZONTAL) {
             numberOfElements = 2
         }
+
         val gridLayoutManager = GridLayoutManager(context, numberOfElements, GridLayoutManager.VERTICAL, false)
         recyclerView?.layoutManager = gridLayoutManager
     }
@@ -58,10 +55,10 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract, OnRecyclerVie
         val url = youtubeRequestMngr.constructYTSearchRequest(25, searchKeyword)
         youtubeRequestMngr.launchYTRequestFromUrl(url)
         youtubeRequestMngr.setListener(object: YoutubeRequestManager.YoutubeRequestListener {
-            override fun youtubeResponse(youtubeObject: YoutubeObject) {
+            override fun youtubeResponse(youtubeItems: ArrayList<YoutubeItem>) {
                 youtubeView?.getParentActivity()?.runOnUiThread {
                     youtubeList.clear()
-                    youtubeList.addAll(youtubeObject.items)
+                    youtubeList.addAll(youtubeItems)
                     recyclerView?.adapter?.notifyDataSetChanged()
                 }
             }
@@ -70,14 +67,7 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract, OnRecyclerVie
     }
 
     override fun onRecyclerViewItemClicked(position: Int, youtubeItem: YoutubeItem, view: View?) {
-        var id : String
-        if(youtubeItem.id.videoId != null) {
-            id = youtubeItem.id.videoId
-        } else {
-            id = youtubeItem.id.channelId
-        }
-
-        routingManager.startActivity(youtubeView?.activity, YoutubeDetailActivity().javaClass, id, view?.findViewById(R.id.thumbnail))
+        routingManager.startActivity(youtubeView?.activity, YoutubeDetailActivity().javaClass, youtubeItem.id.videoId, view?.findViewById(R.id.thumbnail))
     }
 
     override fun onResume() {
@@ -101,6 +91,5 @@ class YoutubePresenter : YoutubeContract.YoutubePresenterContract, OnRecyclerVie
     override fun unbind() {
         this.youtubeView = null
         this.recyclerView = null
-        this.layoutManager = null
     }
 }

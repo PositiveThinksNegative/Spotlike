@@ -35,13 +35,14 @@ class YoutubeView : Fragment(), YoutubeContract.YoutubeViewContract {
         presenter.onViewCreated()
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        var optionHandled = presenter.onOptionsItemSelected(item, getParentActivity())
-        if(optionHandled) {
-            return true
-        } else {
-            return super.onOptionsItemSelected(item)
-        }
+        val optionHandled = presenter.onOptionsItemSelected(item, getParentActivity())
+        return if (optionHandled) true else super.onOptionsItemSelected(item)
     }
 
     override fun getParentActivity(): AppCompatActivity {

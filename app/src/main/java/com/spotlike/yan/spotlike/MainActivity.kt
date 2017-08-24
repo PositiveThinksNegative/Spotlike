@@ -2,12 +2,12 @@ package com.spotlike.yan.spotlike
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.transition.Explode
 import android.view.Menu
 import com.facebook.AccessToken
 import com.spotlike.yan.spotlike.FacebookModule.FacebookView
 import com.spotlike.yan.spotlike.Managers.RoutingManager
 import com.spotlike.yan.spotlike.YoutubeModule.YoutubeView
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -30,12 +30,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var explode = Explode()
-
-        window.allowReturnTransitionOverlap = true
-        window.exitTransition = explode
-        window.enterTransition = null
-
+        setSupportActionBar(main_activity_toolbar)
         if (isFacebookLoggedIn()) {
             routingManager.replaceFragment(R.id.fragment_frame_layout, Bundle(), YoutubeView(), this)
         } else {

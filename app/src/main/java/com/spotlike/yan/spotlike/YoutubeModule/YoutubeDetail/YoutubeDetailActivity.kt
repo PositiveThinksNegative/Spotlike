@@ -1,11 +1,18 @@
 package com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.transition.Explode
+import android.transition.Transition
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.spotlike.yan.spotlike.MainApplication
 import com.spotlike.yan.spotlike.Managers.ImageManager
 import com.spotlike.yan.spotlike.Managers.RoutingManager
@@ -27,19 +34,33 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_youtube_detail)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         hideToolbarTitle()
-        window.allowEnterTransitionOverlap = false
+        hideActionButton()
+        postponeEnterTransition()
 
-        val fade = Explode()
-        fade.excludeTarget(android.R.id.statusBarBackground, true)
-        fade.excludeTarget(android.R.id.navigationBarBackground, true)
-        window.enterTransition = fade
+        thumbnail.transitionName = intent.extras.getString(RoutingManager.TRANSITION_STRING)
+        window.enterTransition = Explode()
+        window.sharedElementEnterTransition.addListener(object: Transition.TransitionListener{
+            override fun onTransitionEnd(p0: Transition?) {
+                window.sharedElementEnterTransition.removeListener(this)
+                youtubeDetailPresenter.addOffsetListener(app_bar)
+                showActionButton()
+            }
+
+            override fun onTransitionResume(p0: Transition?) { }
+
+            override fun onTransitionPause(p0: Transition?) { }
+
+            override fun onTransitionCancel(p0: Transition?) { }
+
+            override fun onTransitionStart(p0: Transition?) { }
+        })
 
         val videoId = intent.extras.getString(RoutingManager.EXTRA_STRING)
-        youtubeDetailPresenter.bind(this, videoId, app_bar)
+        youtubeDetailPresenter.bind(this, videoId)
         youtubeDetailPresenter.onViewCreated()
 
         action_button_play.setOnClickListener {
@@ -55,12 +76,14 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        var optionHandled = youtubeDetailPresenter.onOptionsItemSelected(item, this)
-        if(optionHandled) {
-            return true
-        } else {
-            return super.onOptionsItemSelected(item)
-        }
+        val optionHandled = youtubeDetailPresenter.onOptionsItemSelected(item, this)
+        return if (optionHandled) true else super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        hideActionButton()
+        super.onBackPressed()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -73,11 +96,11 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
     }
 
     override fun showOption(id: Int) {
-        menu?.findItem(id)?.setVisible(true)
+        menu?.findItem(id)?.isVisible = true
     }
 
     override fun hideOption(id: Int) {
-        menu?.findItem(id)?.setVisible(false)
+        menu?.findItem(id)?.isVisible = false
     }
 
     override fun showToolbarTitle() {
@@ -93,11 +116,35 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
     }
 
     override fun hideTitleDescription() {
+        youtube_detail_title.visibility = TextView.INVISIBLE
+    }
+
+    override fun removeTitleDescription() {
         youtube_detail_title.visibility = TextView.GONE
     }
 
+    override fun showActionButton() {
+        action_button_play.visibility = View.VISIBLE
+    }
+
+    override fun hideActionButton() {
+        action_button_play.visibility = View.GONE
+    }
+
     override fun setToolbarImage(imageSource: String) {
-        imageManager.loadImage(imageSource, thumbnail)
+        val requestListener : RequestListener<Drawable> = object: RequestListener<Drawable> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                startPostponedEnterTransition()
+                return false
+            }
+
+            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                startPostponedEnterTransition()
+                return false
+            }
+
+        }
+        imageManager.loadImageWithRequest(imageSource, thumbnail, requestListener)
     }
 
     override fun setDescriptionText(text: String) {
@@ -105,10 +152,10 @@ class YoutubeDetailActivity : AppCompatActivity(), YoutubeDetailContract.Youtube
     }
 
     override fun setToolbarTitle(title: String) {
-        toolbar_layout?.title = title
+        toolbar_layout.title = title
     }
 
     override fun setDescriptionTitle(title: String) {
-        youtube_detail_title?.text = title
+        youtube_detail_title.text = title
     }
 }

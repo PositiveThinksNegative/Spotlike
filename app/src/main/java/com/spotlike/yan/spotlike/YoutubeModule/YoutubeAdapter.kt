@@ -1,5 +1,6 @@
 package com.spotlike.yan.spotlike.YoutubeModule
 
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,8 @@ import javax.inject.Inject
 class YoutubeAdapter(private val values : ArrayList<YoutubeItem>): RecyclerView.Adapter<YoutubeAdapter.ViewHolder>() {
     @Inject lateinit var imageManager: ImageManager
     private var listener: OnRecyclerViewItemClickListener? = null
+    private var mLastClickTime = System.currentTimeMillis()
+    private val CLICK_TIME_INTERVAL: Long = 400
 
     init {
         MainApplication.graph.inject(this)
@@ -54,12 +57,21 @@ class YoutubeAdapter(private val values : ArrayList<YoutubeItem>): RecyclerView.
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var youtubeItem : YoutubeItem = values.get(position)
-        imageManager.loadImage(youtubeItem.snippet.thumbnails.high.url, holder.imageView)
+        imageManager.loadImage(youtubeItem.snippet.thumbnails.medium.url, holder.imageView)
+        ViewCompat.setTransitionName(holder.imageView, youtubeItem.id.videoId)
         holder.textHeader.text = youtubeItem.snippet.title
         holder.textFooter.text = youtubeItem.snippet.channelTitle
         holder.layout.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
+                val now = System.currentTimeMillis()
+                if (now - mLastClickTime < CLICK_TIME_INTERVAL) {
+                    return
+                }
+                mLastClickTime = now
+
+                view?.isClickable = false
                 listener?.onRecyclerViewItemClicked(holder.adapterPosition, youtubeItem, view)
+                view?.isClickable = true
             }
         })
     }

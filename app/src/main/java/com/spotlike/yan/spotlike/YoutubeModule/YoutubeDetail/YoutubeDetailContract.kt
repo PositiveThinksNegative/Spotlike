@@ -1,6 +1,7 @@
 package com.spotlike.yan.spotlike.YoutubeModule.YoutubeDetail
 
 import android.app.Activity
+import android.support.design.widget.AppBarLayout
 import android.view.MenuItem
 import com.spotlike.yan.spotlike.BaseContract
 
@@ -15,6 +16,9 @@ interface YoutubeDetailContract {
         fun hideToolbarTitle()
         fun showTitleDescription()
         fun hideTitleDescription()
+        fun removeTitleDescription()
+        fun showActionButton()
+        fun hideActionButton()
         fun setDescriptionTitle(title: String)
         fun setToolbarTitle(title: String)
         fun setToolbarImage(imageSource: String)
@@ -24,5 +28,6 @@ interface YoutubeDetailContract {
     interface YoutubeDetailPresentation: BaseContract.BasePresenterContract {
         fun onActionPlaySelected(activity: Activity)
         fun onOptionsItemSelected(item: MenuItem?, activity: Activity) : Boolean
+        fun addOffsetListener(appBarLayout: AppBarLayout)
     }
 }

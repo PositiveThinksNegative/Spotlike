@@ -31,6 +31,7 @@ class RoutingManager private constructor() {
             RoutingManager()
         }
         val EXTRA_STRING = "extra_string"
+        val TRANSITION_STRING = "transition_string"
     }
 
     init {
@@ -95,6 +96,8 @@ class RoutingManager private constructor() {
                 var pair2 = Pair<View, String>(activity.findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME)
                 var pair3 = Pair<View, String>(view, ViewCompat.getTransitionName(view))
                 val activityOptions : ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, pair1, pair2, pair3)
+
+                intent.putExtra(TRANSITION_STRING, ViewCompat.getTransitionName(view))
                 activity.startActivity(intent, activityOptions.toBundle())
             } else {
                 activity.startActivity(intent)
