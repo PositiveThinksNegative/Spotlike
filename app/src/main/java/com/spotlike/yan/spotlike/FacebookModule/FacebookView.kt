@@ -27,7 +27,7 @@ class FacebookView : Fragment(), FacebookContract.FacebookViewContract {
         return inflater.inflate(R.layout.activity_facebook_login, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         facebookPresenter.bind(this, login_button)
     }

@@ -29,7 +29,7 @@ class YoutubeView : Fragment(), YoutubeContract.YoutubeViewContract {
         return inflater.inflate(R.layout.youtube_list_view, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.bind(this, recyclerView)
         presenter.onViewCreated()
